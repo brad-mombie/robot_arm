@@ -15,8 +15,9 @@ while True:
 
     # Define the lower and upper range for red color
     # Note: This might need adjustment based on your environment
-    lower_red = np.array([0, 120, 70])
-    upper_red = np.array([10, 255, 255])
+    lower_red = np.array([0, 100, 50])
+    upper_red = np.array([30, 255, 255])
+
 
     # Create a binary mask
     mask = cv2.inRange(hsv, lower_red, upper_red)
