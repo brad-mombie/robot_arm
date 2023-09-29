@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
-from Arm_Lib import Arm
+from Arm_Lib import Arm_Device as Arm
+
 
 # Initialize the robot arm and the video capture
 arm = Arm()
