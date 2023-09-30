@@ -6,9 +6,9 @@ from Arm_Lib import Arm_Device
 arm = Arm_Device()
 
 # Initialize the current angles of the servos
-current_angle_of_servo_1 = arm.Arm_serial_servo_read(1) or 90
-current_angle_of_servo_2 = arm.Arm_serial_servo_read(2) or 90
-current_angle_of_servo_3 = arm.Arm_serial_servo_read(3) or 90
+current_angle_of_servo_1 = arm.Arm_serial_servo_read(1) or 90  # Default to 90 if None
+current_angle_of_servo_2 = arm.Arm_serial_servo_read(2) or 90  # Default to 90 if None
+current_angle_of_servo_3 = arm.Arm_serial_servo_read(3) or 90  # Default to 90 if None
 
 # Define deadband values
 deadband_horizontal = 20
@@ -57,18 +57,20 @@ while True:
                 arm.Arm_serial_servo_write(1, current_angle_of_servo_1, 500)
 
         # Vertical tracking using two servos
-        vertical_error = 240 - cy  # 240 is the vertical center of a 480p image
-        half_error = int(vertical_error / 2)
-
-        # Adjust servo 2
-        if current_angle_of_servo_2 - half_error > 0 and current_angle_of_servo_2 - half_error < 180:
-            current_angle_of_servo_2 -= half_error
-            arm.Arm_serial_servo_write(2, current_angle_of_servo_2, 500)
-
-        # Adjust servo 3 for the remaining error
-        if current_angle_of_servo_3 + vertical_error - half_error > 0 and current_angle_of_servo_3 + vertical_error - half_error < 180:
-            current_angle_of_servo_3 += vertical_error - half_error
-            arm.Arm_serial_servo_write(3, current_angle_of_servo_3, 500)
+        if cy < 210 - deadband_vertical:
+            if current_angle_of_servo_2 < 180:
+                current_angle_of_servo_2 -= adjustment_angle  # Flipped sign
+                arm.Arm_serial_servo_write(2, current_angle_of_servo_2, 500)
+            elif current_angle_of_servo_3 < 180:
+                current_angle_of_servo_3 += adjustment_angle
+                arm.Arm_serial_servo_write(3, current_angle_of_servo_3, 500)
+        elif cy > 270 + deadband_vertical:
+            if current_angle_of_servo_2 > 0:
+                current_angle_of_servo_2 += adjustment_angle  # Flipped sign
+                arm.Arm_serial_servo_write(2, current_angle_of_servo_2, 500)
+            elif current_angle_of_servo_3 > 0:
+                current_angle_of_servo_3 -= adjustment_angle
+                arm.Arm_serial_servo_write(3, current_angle_of_servo_3, 500)
 
     cv2.imshow('frame', frame)
     if cv2.waitKey(1) & 0xFF == ord('q'):
