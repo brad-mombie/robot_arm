@@ -6,9 +6,10 @@ from Arm_Lib import Arm_Device
 arm = Arm_Device()
 
 # Initialize the current angles of the servos
-current_angle_of_servo_1 = arm.Arm_serial_servo_read(1)
-current_angle_of_servo_2 = arm.Arm_serial_servo_read(2)
-current_angle_of_servo_3 = arm.Arm_serial_servo_read(3)
+current_angle_of_servo_1 = arm.Arm_serial_servo_read(1) or 90  # Default to 90 if None
+current_angle_of_servo_2 = arm.Arm_serial_servo_read(2) or 90  # Default to 90 if None
+current_angle_of_servo_3 = arm.Arm_serial_servo_read(3) or 90  # Default to 90 if None
+
 
 # Define deadband values
 deadband_horizontal = 20
