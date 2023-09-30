@@ -14,6 +14,9 @@ current_angle_of_servo_3 = arm.Arm_serial_servo_read(3) or 90
 deadband_horizontal = 20
 deadband_vertical = 20
 
+# Max area threshold
+max_area_threshold = 44370
+
 # Start capturing video from the first camera device
 cap = cv2.VideoCapture(0)
 
@@ -39,18 +42,21 @@ while True:
 
     if contours:
         c = max(contours, key=cv2.contourArea)
-        M = cv2.moments(c)
-        if M["m00"] != 0:
-            cx = int(M["m10"] / M["m00"])
-            cy = int(M["m01"] / M["m00"])
-        else:
-            cx, cy = 0, 0
-
+        
         # Get the bounding rectangle of the contour
         x, y, w, h = cv2.boundingRect(c)
-        # Draw the bounding rectangle around the contour
-        cv2.rectangle(frame, (x, y), (x+w, y+h), (1, 227, 254), 2)  # (1, 227, 254) is the color; 2 is the thickness
+        
+        # Check if the bounding box area exceeds the threshold
+        if w * h > max_area_threshold:
+            # Move the arm to the neutral position
+            arm.Arm_serial_servo_write(1, 92, 500)
+            arm.Arm_serial_servo_write(2, 114, 500)
+            arm.Arm_serial_servo_write(3, 26, 500)
+            arm.Arm_serial_servo_write(4, 29, 500)
+            arm.Arm_serial_servo_write(5, 89, 500)
+            continue  # Skip the rest of the loop and start a new frame
 
+    
 
         # Logic to move the arm
         adjustment_angle = 2
