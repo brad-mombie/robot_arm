@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 from Arm_Lib import Arm_Device
+import time
 
 # Initialize the Arm
 arm = Arm_Device()
@@ -48,14 +49,19 @@ while True:
         bounding_area = w * h
 
         # Check if the bounding box area exceeds the max threshold or is below the min threshold
-    #    if bounding_area > max_area_threshold or bounding_area < min_area_threshold:
-    #       # Move the arm to the neutral position
-    #        arm.Arm_serial_servo_write(1, 92, 500)
-    #        arm.Arm_serial_servo_write(2, 114, 500)
-    #        arm.Arm_serial_servo_write(3, 26, 500)
-    #        arm.Arm_serial_servo_write(4, 29, 500)
-    #        arm.Arm_serial_servo_write(5, 89, 500)
-    #        continue  # Skip the rest of the loop and start a new frame
+        if bounding_area > max_area_threshold or bounding_area < min_area_threshold:
+           # Move the arm to the neutral position
+            arm.Arm_serial_servo_write(1, 92, 500)
+            time.sleep(.1)
+            arm.Arm_serial_servo_write(2, 114, 500)
+            time.sleep(.1)
+            arm.Arm_serial_servo_write(3, 26, 500)
+            time.sleep(.1)
+            arm.Arm_serial_servo_write(4, 29, 500)
+            time.sleep(.1)
+            arm.Arm_serial_servo_write(5, 89, 500)
+            time.sleep(.1)
+            continue  # Skip the rest of the loop and start a new frame
 
         # Draw the bounding rectangle around the contour
         cv2.rectangle(frame, (x, y), (x+w, y+h), (1, 227, 254), 2)
