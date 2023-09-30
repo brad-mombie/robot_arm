@@ -9,6 +9,10 @@ arm = Arm_Device()
 current_angle_of_servo_1 = arm.Arm_serial_servo_read(1)
 current_angle_of_servo_2 = arm.Arm_serial_servo_read(2)
 
+# Define deadband values
+deadband_horizontal = 20
+deadband_vertical = 20
+
 # Start capturing video from the first camera device
 cap = cv2.VideoCapture(0)
 
@@ -41,25 +45,25 @@ while True:
         # Logic to move the arm
         adjustment_angle = 2
 
-        if cx < 290:
+        if cx < 290 - deadband_horizontal:
             # Move left
             if current_angle_of_servo_1 < 180:
                 current_angle_of_servo_1 += adjustment_angle
                 arm.Arm_serial_servo_write(1, current_angle_of_servo_1, 500)
 
-        elif cx > 350:
+        elif cx > 350 + deadband_horizontal:
             # Move right
             if current_angle_of_servo_1 > 0:
                 current_angle_of_servo_1 -= adjustment_angle
                 arm.Arm_serial_servo_write(1, current_angle_of_servo_1, 500)
 
-        if cy < 210:
+        if cy < 210 - deadband_vertical:
             # Move up
             if current_angle_of_servo_2 < 180:
                 current_angle_of_servo_2 += adjustment_angle
                 arm.Arm_serial_servo_write(2, current_angle_of_servo_2, 500)
 
-        elif cy > 270:
+        elif cy > 270 + deadband_vertical:
             # Move down
             if current_angle_of_servo_2 > 0:
                 current_angle_of_servo_2 -= adjustment_angle
