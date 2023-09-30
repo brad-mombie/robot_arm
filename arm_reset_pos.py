@@ -12,3 +12,10 @@ print("servo_3: ", arm.Arm_serial_servo_read(3))
 print("servo_4: ", arm.Arm_serial_servo_read(4))
 print("servo_5: ", arm.Arm_serial_servo_read(5))
 print("servo_6: ", arm.Arm_serial_servo_read(6))
+
+arm.Arm_serial_servo_write(1, 92, 500)
+arm.Arm_serial_servo_write(2, 114, 500)
+arm.Arm_serial_servo_write(3, 26, 500)
+arm.Arm_serial_servo_write(4, 29, 500)
+arm.Arm_serial_servo_write(5, 89, 500)
+
