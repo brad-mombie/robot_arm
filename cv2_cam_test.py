@@ -46,8 +46,11 @@ while True:
         else:
             cx, cy = 0, 0
 
-        # Draw a circle at the center of the contour
-        cv2.circle(frame, (cx, cy), 10, (1, 227, 254), -1)
+        # Get the bounding rectangle of the contour
+        x, y, w, h = cv2.boundingRect(c)
+        # Draw the bounding rectangle around the contour
+        cv2.rectangle(frame, (x, y), (x+w, y+h), (1, 227, 254), 2)  # (1, 227, 254) is the color; 2 is the thickness
+
 
         # Logic to move the arm
         adjustment_angle = 2
