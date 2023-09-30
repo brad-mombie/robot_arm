@@ -49,58 +49,58 @@ while True:
         bounding_area = w * h
 
         # Check if the bounding box area exceeds the max threshold or is below the min threshold
-     #   if bounding_area > max_area_threshold or bounding_area < min_area_threshold:
-     #      # Move the arm to the neutral position
-     #       arm.Arm_serial_servo_write(1, 92, 500)
-     #       time.sleep(.1)
-     #       arm.Arm_serial_servo_write(2, 114, 500)
-     #       time.sleep(.1)
-     #       arm.Arm_serial_servo_write(3, 26, 500)
-     #       time.sleep(.1)
-     #       arm.Arm_serial_servo_write(4, 29, 500)
-     #       time.sleep(.1)
-     #       arm.Arm_serial_servo_write(5, 89, 500)
-     #       time.sleep(.1)
-     #       continue  # Skip the rest of the loop and start a new frame
-
-        # Draw the bounding rectangle around the contour
-        cv2.rectangle(frame, (x, y), (x+w, y+h), (1, 227, 254), 2)
-
-        M = cv2.moments(c)
-        if M["m00"] != 0:
-            cx = int(M["m10"] / M["m00"])
-            cy = int(M["m01"] / M["m00"])
+        if bounding_area > max_area_threshold or bounding_area < min_area_threshold:
+           # Move the arm to the neutral position
+            arm.Arm_serial_servo_write(1, 92, 500)
+            time.sleep(.1)
+            arm.Arm_serial_servo_write(2, 114, 500)
+            time.sleep(.1)
+            arm.Arm_serial_servo_write(3, 26, 500)
+            time.sleep(.1)
+            arm.Arm_serial_servo_write(4, 29, 500)
+            time.sleep(.1)
+            arm.Arm_serial_servo_write(5, 89, 500)
+            time.sleep(.1)
+            continue  # Skip the rest of the loop and start a new frame
         else:
-            cx, cy = 0, 0
+            # Draw the bounding rectangle around the contour
+            cv2.rectangle(frame, (x, y), (x+w, y+h), (1, 227, 254), 2)
 
-        # Logic to move the arm
-        adjustment_angle = 2
+            M = cv2.moments(c)
+            if M["m00"] != 0:
+                cx = int(M["m10"] / M["m00"])
+                cy = int(M["m01"] / M["m00"])
+            else:
+                cx, cy = 0, 0
 
-        # Horizontal tracking
-        if cx < 290 - deadband_horizontal:
-            if current_angle_of_servo_1 < 180:
-                current_angle_of_servo_1 += adjustment_angle
-                arm.Arm_serial_servo_write(1, current_angle_of_servo_1, 500)
-        elif cx > 350 + deadband_horizontal:
-            if current_angle_of_servo_1 > 0:
-                current_angle_of_servo_1 -= adjustment_angle
-                arm.Arm_serial_servo_write(1, current_angle_of_servo_1, 500)
+            # Logic to move the arm
+            adjustment_angle = 2
 
-        # Vertical tracking using two servos
-        if cy < 210 - deadband_vertical:
-            if current_angle_of_servo_2 < 180:
-                current_angle_of_servo_2 += adjustment_angle
-                arm.Arm_serial_servo_write(2, current_angle_of_servo_2, 500)
-            if current_angle_of_servo_3 < 180:
-                current_angle_of_servo_3 += adjustment_angle
-                arm.Arm_serial_servo_write(3, current_angle_of_servo_3, 500)
-        elif cy > 270 + deadband_vertical:
-            if current_angle_of_servo_2 > 0:
-                current_angle_of_servo_2 -= adjustment_angle
-                arm.Arm_serial_servo_write(2, current_angle_of_servo_2, 500)
-            if current_angle_of_servo_3 > 0:
-                current_angle_of_servo_3 -= adjustment_angle
-                arm.Arm_serial_servo_write(3, current_angle_of_servo_3, 500)
+            # Horizontal tracking
+            if cx < 290 - deadband_horizontal:
+                if current_angle_of_servo_1 < 180:
+                    current_angle_of_servo_1 += adjustment_angle
+                    arm.Arm_serial_servo_write(1, current_angle_of_servo_1, 500)
+            elif cx > 350 + deadband_horizontal:
+                if current_angle_of_servo_1 > 0:
+                    current_angle_of_servo_1 -= adjustment_angle
+                    arm.Arm_serial_servo_write(1, current_angle_of_servo_1, 500)
+
+            # Vertical tracking using two servos
+            if cy < 210 - deadband_vertical:
+                if current_angle_of_servo_2 < 180:
+                    current_angle_of_servo_2 += adjustment_angle
+                    arm.Arm_serial_servo_write(2, current_angle_of_servo_2, 500)
+                if current_angle_of_servo_3 < 180:
+                    current_angle_of_servo_3 += adjustment_angle
+                    arm.Arm_serial_servo_write(3, current_angle_of_servo_3, 500)
+            elif cy > 270 + deadband_vertical:
+                if current_angle_of_servo_2 > 0:
+                    current_angle_of_servo_2 -= adjustment_angle
+                    arm.Arm_serial_servo_write(2, current_angle_of_servo_2, 500)
+                if current_angle_of_servo_3 > 0:
+                    current_angle_of_servo_3 -= adjustment_angle
+                    arm.Arm_serial_servo_write(3, current_angle_of_servo_3, 500)
 
     # Display the frame
     cv2.imshow('frame', frame)
