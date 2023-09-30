@@ -14,18 +14,15 @@ current_angle_of_servo_3 = arm.Arm_serial_servo_read(3) or 90
 deadband_horizontal = 20
 deadband_vertical = 20
 
-# Max area threshold
-max_area_threshold = 44370
-
 # Start capturing video from the first camera device
 cap = cv2.VideoCapture(0)
 
 while True:
     ret, frame = cap.read()
-    
+
     # Apply Gaussian blur to the frame
     blurred_frame = cv2.GaussianBlur(frame, (15, 15), 0)
-    
+
     # Convert the frame to HSV color space
     hsv = cv2.cvtColor(blurred_frame, cv2.COLOR_BGR2HSV)
 
@@ -35,7 +32,6 @@ while True:
 
     # Create a binary mask where the green range is white
     mask = cv2.inRange(hsv, lower_green, upper_green)
-
 
     # Find contours in the frame
     contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -56,7 +52,15 @@ while True:
             arm.Arm_serial_servo_write(5, 89, 500)
             continue  # Skip the rest of the loop and start a new frame
 
-    
+        # Draw the bounding rectangle around the contour
+        cv2.rectangle(frame, (x, y), (x+w, y+h), (1, 227, 254), 2)  # (1, 227, 254) is the color; 2 is the thickness
+
+        M = cv2.moments(c)
+        if M["m00"] != 0:
+            cx = int(M["m10"] / M["m00"])
+            cy = int(M["m01"] / M["m00"])
+        else:
+            cx, cy = 0, 0
 
         # Logic to move the arm
         adjustment_angle = 2
@@ -86,7 +90,6 @@ while True:
             if current_angle_of_servo_3 > 0:
                 current_angle_of_servo_3 -= adjustment_angle
                 arm.Arm_serial_servo_write(3, current_angle_of_servo_3, 500)
-
 
     # Display the frame
     cv2.imshow('frame', frame)
