@@ -23,7 +23,7 @@ while True:
     # Apply Gaussian blur to the frame
     blurred_frame = cv2.GaussianBlur(frame, (15, 15), 0)
     
-    # Convert the blurred frame to HSV color space
+    # Convert the frame to HSV color space
     hsv = cv2.cvtColor(blurred_frame, cv2.COLOR_BGR2HSV)
 
     # Define the HSV range for green
@@ -32,6 +32,7 @@ while True:
 
     # Create a binary mask where the green range is white
     mask = cv2.inRange(hsv, lower_green, upper_green)
+
 
     # Find contours in the frame
     contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
