@@ -14,6 +14,9 @@ current_angle_of_servo_3 = arm.Arm_serial_servo_read(3) or 90
 deadband_horizontal = 20
 deadband_vertical = 20
 
+# Max area threshold
+max_area_threshold = 44370
+
 # Start capturing video from the first camera device
 cap = cv2.VideoCapture(0)
 
