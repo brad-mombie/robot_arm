@@ -8,6 +8,7 @@ arm = Arm_Device()
 # Initialize the current angles of the servos
 current_angle_of_servo_1 = arm.Arm_serial_servo_read(1)
 current_angle_of_servo_2 = arm.Arm_serial_servo_read(2)
+current_angle_of_servo_3 = arm.Arm_serial_servo_read(3)
 
 # Define deadband values
 deadband_horizontal = 20
@@ -45,29 +46,31 @@ while True:
         # Logic to move the arm
         adjustment_angle = 2
 
+        # Horizontal tracking
         if cx < 290 - deadband_horizontal:
-            # Move left
             if current_angle_of_servo_1 < 180:
                 current_angle_of_servo_1 += adjustment_angle
                 arm.Arm_serial_servo_write(1, current_angle_of_servo_1, 500)
-
         elif cx > 350 + deadband_horizontal:
-            # Move right
             if current_angle_of_servo_1 > 0:
                 current_angle_of_servo_1 -= adjustment_angle
                 arm.Arm_serial_servo_write(1, current_angle_of_servo_1, 500)
 
+        # Vertical tracking using two servos
         if cy < 210 - deadband_vertical:
-            # Move up
-            if current_angle_of_servo_2 < 180:
+            if current_angle_of_servo_2 < 90:
                 current_angle_of_servo_2 += adjustment_angle
                 arm.Arm_serial_servo_write(2, current_angle_of_servo_2, 500)
-
+            elif current_angle_of_servo_3 < 180:
+                current_angle_of_servo_3 += adjustment_angle
+                arm.Arm_serial_servo_write(3, current_angle_of_servo_3, 500)
         elif cy > 270 + deadband_vertical:
-            # Move down
-            if current_angle_of_servo_2 > 0:
+            if current_angle_of_servo_2 > 90:
                 current_angle_of_servo_2 -= adjustment_angle
                 arm.Arm_serial_servo_write(2, current_angle_of_servo_2, 500)
+            elif current_angle_of_servo_3 > 0:
+                current_angle_of_servo_3 -= adjustment_angle
+                arm.Arm_serial_servo_write(3, current_angle_of_servo_3, 500)
 
     cv2.imshow('frame', frame)
     if cv2.waitKey(1) & 0xFF == ord('q'):
