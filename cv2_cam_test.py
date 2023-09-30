@@ -58,18 +58,18 @@ while True:
 
          # Vertical tracking using two servos
         if cy < 210 - deadband_vertical:
-            if current_angle_of_servo_2 > 0:
-                current_angle_of_servo_2 -= adjustment_angle
-                arm.Arm_serial_servo_write(2, current_angle_of_servo_2, 500)
-            elif current_angle_of_servo_3 < 180:
-                current_angle_of_servo_3 += adjustment_angle
-                arm.Arm_serial_servo_write(3, current_angle_of_servo_3, 500)
-        elif cy > 270 + deadband_vertical:
             if current_angle_of_servo_2 < 180:
                 current_angle_of_servo_2 += adjustment_angle
                 arm.Arm_serial_servo_write(2, current_angle_of_servo_2, 500)
             elif current_angle_of_servo_3 > 0:
                 current_angle_of_servo_3 -= adjustment_angle
+                arm.Arm_serial_servo_write(3, current_angle_of_servo_3, 500)
+        elif cy > 270 + deadband_vertical:
+            if current_angle_of_servo_2 > 0:
+                current_angle_of_servo_2 -= adjustment_angle
+                arm.Arm_serial_servo_write(2, current_angle_of_servo_2, 500)
+            elif current_angle_of_servo_3 < 180:
+                current_angle_of_servo_3 += adjustment_angle
                 arm.Arm_serial_servo_write(3, current_angle_of_servo_3, 500)
 
 
