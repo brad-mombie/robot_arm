@@ -61,8 +61,8 @@ while True:
         half_error = int(vertical_error / 2)
 
         # Adjust servo 2
-        if current_angle_of_servo_2 + half_error > 0 and current_angle_of_servo_2 + half_error < 180:
-            current_angle_of_servo_2 += half_error
+        if current_angle_of_servo_2 - half_error > 0 and current_angle_of_servo_2 - half_error < 180:
+            current_angle_of_servo_2 -= half_error
             arm.Arm_serial_servo_write(2, current_angle_of_servo_2, 500)
 
         # Adjust servo 3 for the remaining error
