@@ -22,8 +22,7 @@ arm.Arm_serial_servo_write(3, 26, 500)
 time.sleep(1)
 arm.Arm_serial_servo_write(4, 29, 500)
 time.sleep(1)
-arm.Arm_serial_servo_write(5, 89, 500)
+arm.Arm_serial_servo_write(5, 45, 500)
 time.sleep(1)
-arm.Arm_serial_servo_write(6,90,500)
-time.sleep(1)
+
 
